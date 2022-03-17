@@ -1,5 +1,5 @@
 import ExamAPI from "../API/ExamAPI";
-import { QuestionFactory } from "./Question";
+import { loadQuestions } from "./Question";
 
 export default class Exam {
   #questions;
@@ -7,20 +7,20 @@ export default class Exam {
   #userAnswers;
   #idxOfCurrentQuestion;
   
-  constructor(){
+  constructor() {
     this.#questions = [];
     this.#expiredTimeInSecond = 0;
     this.#userAnswers = [];
     this.#idxOfCurrentQuestion = -1;
   };
   
-  getCurrentQuestion = () => {
+  getCurrentQuestion() {
     return this.#questions[this.#idxOfCurrentQuestion];
   };
   
   getRandomExam = () => new Promise((resolve, reject) => {
     ExamAPI.get().then((examInJSON) => {
-      this.#questions = QuestionFactory.loadQuestions(examInJSON.questions);
+      this.#questions = loadQuestions(examInJSON.questions);
       this.#expiredTimeInSecond = examInJSON.expiredTimeInSecond;
       this.#userAnswers = new Array(this.#questions.length).fill("");
       this.#idxOfCurrentQuestion = -1;
@@ -30,40 +30,40 @@ export default class Exam {
     });
   });
 
-  getExpiredTime(){
+  getExpiredTime() {
     return this.#expiredTimeInSecond;
   };
 
-  getNumberOfQuestions(){
+  getNumberOfQuestions() {
     return this.#questions.length;
   };
 
-  getNextQuestion(){
+  getNextQuestion() {
     return {
       question: this.#questions[++this.#idxOfCurrentQuestion],
       userAnswer: this.#userAnswers[this.#idxOfCurrentQuestion]
     };
   };
 
-  getPreviousQuestion(){
+  getPreviousQuestion() {
     return {
       question: this.#questions[--this.#idxOfCurrentQuestion],
       userAnswer: this.#userAnswers[this.#idxOfCurrentQuestion]
     };
   };
 
-  hasNextQuestion(){
+  hasNextQuestion() {
     return this.#idxOfCurrentQuestion < this.#questions.length - 1;
   };
-  hasPreviousQuestion(){
+  hasPreviousQuestion() {
     return this.#idxOfCurrentQuestion > 0;
   };
   
-  setUserAnswer(answer){
+  setUserAnswer(answer) {
     this.#userAnswers[this.#idxOfCurrentQuestion] = answer;
   };
 
-  getResults(){
+  getResults() {
     const results = []
     for (let questionIdx =0; questionIdx < this.#questions.length; questionIdx++) {
       const question = this.#questions[questionIdx];

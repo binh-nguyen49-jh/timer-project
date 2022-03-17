@@ -1,6 +1,9 @@
 import timeFormat from "../utils/timeFormat";
 
-function Result({results, timeDoneInSecond}) {
+function Result({
+  results, 
+  timeDoneInSecond
+}) {
   const mark = results.reduce((mark, {
     isCorrect
   }) => {

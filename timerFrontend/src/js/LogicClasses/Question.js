@@ -14,12 +14,12 @@ class Question{
 
 
 export class MultiChoiceQuestion extends Question{
-  constructor({content, answer, choices}){
+  constructor({content, answer, choices}) {
     super({content, answer});
     this.choices = choices;
   };
-  
-  checkAnswer(userAnswer){
+
+  checkAnswer(userAnswer) {
     if(!userAnswer) {
       return false;
     }
@@ -28,12 +28,12 @@ export class MultiChoiceQuestion extends Question{
 }
 
 export class TextQuestion  extends Question{
-  constructor({content, answer}){
+  constructor({content, answer}) {
     super({content, answer});
     this.keywords =  answer.match(/[A-Za-z0-9]+/g);
   };
 
-  checkAnswer(userAnswer){
+  checkAnswer(userAnswer) {
     if (!userAnswer) {
       return false;
     }
@@ -59,8 +59,7 @@ export class TextQuestion  extends Question{
   };
 }
 
-export class QuestionFactory{
-  static loadQuestions(questions){
+export function loadQuestions(questions) {
     const questionInstances = [];
     for (let question of questions) {
       if (question.choices) {
@@ -78,4 +77,3 @@ export class QuestionFactory{
     }
     return questionInstances;
   };
-}

@@ -10,10 +10,9 @@ class MainComponent {
     this.timer = new Timer({timerElement: this.mainElements.timerElement});
     this.addEventListeners();
     this.initializeSectionState();
-     
   };
 
-  initializeSectionState () {
+  initializeSectionState = () => {
     this.toggleSectionState({
       isDoingExam:true
     });
@@ -22,15 +21,15 @@ class MainComponent {
   };
 
   addEventListeners = () => {
-    this.mainElements.timerElement.addEventListener("click", this.handleClickTimer);
-    this.mainElements.nextButton.addEventListener("click", () => this.handleClickNavigateButton({
+    this.mainElements.timerElement.onclick =  this.handleClickTimer;
+    this.mainElements.nextButton.onclick =  () => this.handleClickNavigateButton({
       isNextButton: true
-    }));
-    this.mainElements.backButton.addEventListener("click", () => this.handleClickNavigateButton({
+    });
+    this.mainElements.backButton.onclick =  () => this.handleClickNavigateButton({
       isNextButton: false
-    }));
-    this.mainElements.retestButton.addEventListener("click", () => this.handleClickRetestButton());
-    this.mainElements.homeButton.addEventListener("click", () => this.initializeSectionState());
+    });
+    this.mainElements.retestButton.onclick =  () => this.handleClickRetestButton();
+    this.mainElements.homeButton.onclick =  () => this.initializeSectionState();
   };
 
   handleClickNavigateButton = ({
@@ -66,7 +65,9 @@ class MainComponent {
     this.timer.end();
   };
   
-  toggleSectionState = ({isDoingExam}) => {
+  toggleSectionState = ({
+    isDoingExam
+  }) => {
     if (isDoingExam) {
       // Show element of exam section
       this.mainElements.examContainer.style.display = 'block';
@@ -122,7 +123,10 @@ class MainComponent {
   showResult = () => {
     const results = this.exam.getResults();
     // Render HTML based on the results 
-    this.mainElements.resultContainer.innerHTML = Result({results, timeDoneInSecond: this.exam.getExpiredTime() -this.timer.getCurrentTimeout()});
+    this.mainElements.resultContainer.innerHTML = Result({
+      results, 
+      timeDoneInSecond: this.exam.getExpiredTime() -this.timer.getCurrentTimeout()
+    });
     this.toggleSectionState({
       isDoingExam: false
     });
@@ -131,7 +135,7 @@ class MainComponent {
   showQuestion = ({
     isGettingNextQuestion
   }) => {
-    const {question, userAnswer} = isGettingNextQuestion ? this.exam.getNextQuestion() : this.exam.getPreviousQuestion();
+    const { question, userAnswer } = isGettingNextQuestion ? this.exam.getNextQuestion() : this.exam.getPreviousQuestion();
     if (question) {
       if (question.choices) {
         this.mainElements.questionContainer.innerHTML = Question({

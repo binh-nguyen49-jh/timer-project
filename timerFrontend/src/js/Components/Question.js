@@ -1,4 +1,7 @@
-function TextQuestion({question, userAnswer}) {
+function TextQuestion({
+  question, 
+  userAnswer
+}) {
   return `
   <div class="question">
     <p class = "question-content">Câu hỏi: ${question.content}</p>
@@ -10,7 +13,10 @@ function TextQuestion({question, userAnswer}) {
   `;
 }
 
-function MultipleChoiceQuestion({question, userAnswer}) {
+function MultipleChoiceQuestion({
+  question, 
+  userAnswer
+}) {
   return `
   <div class="question --multichoices">
     <p class = "question-content">Câu hỏi: ${question.content}</p>
