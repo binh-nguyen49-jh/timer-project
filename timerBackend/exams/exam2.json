@@ -1,0 +1,19 @@
+{
+    "expiredTimeInSecond": "100",
+    "questions": [
+        {
+            "content": "What has a face and two hands but no arms or legs?",
+            "answer": "A clock"
+        },
+        {
+            "content": "I travel all around the world, but never leave the corner. What am I?",
+            "answer": "A stamp",
+            "choices": [
+                "A stamp",
+                "A plane",
+                "A email",
+                "A phone"
+            ]
+        }
+    ]
+}

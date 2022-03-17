@@ -1,0 +1,23 @@
+{
+    "expiredTimeInSecond": "100",
+    "questions": [
+        {
+            "content": "What kind of room has no doors or windows?",
+            "answer": "A Mushroom"
+        },
+        {
+            "content": "What do you sit on, sleep on, and brush your teeth with?",
+            "answer": "A chair, a bed, and a toothbrush"
+        },
+        {
+            "content": "What’s the first thing a gardener puts in his garden at the beginning of the year?",
+            "answer": "His foot",
+            "choices": [
+                "His foot",
+                "His hand",
+                "His crawl",
+                "His soul"
+            ]
+        }
+    ]
+}
