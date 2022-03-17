@@ -7,7 +7,7 @@ function TextQuestion({question, userAnswer}) {
       <input type="text" name="answer" value = ${userAnswer? userAnswer: ''}>
     </form>
   </div>
-  `
+  `;
 }
 
 function MultipleChoiceQuestion({question, userAnswer}) {
@@ -29,13 +29,13 @@ function MultipleChoiceQuestion({question, userAnswer}) {
       </div>
     </form>
   </div>
-  `
+  `;
 }
 
 export default function Question({
   question,
   userAnswer,
-  isPlainTextQuestion
+  isTextQuestion
 }) {
-  return isPlainTextQuestion ? TextQuestion({question, userAnswer}) : MultipleChoiceQuestion({question, userAnswer});
+  return isTextQuestion ? TextQuestion({question, userAnswer}) : MultipleChoiceQuestion({question, userAnswer});
 }

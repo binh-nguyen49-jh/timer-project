@@ -9,7 +9,6 @@ function Timer ({
   this.timeOutInSecond = timeOutInSecond;
   this.onEnd = onEnd;
   this.timerCountdown = null;
-  console.log(this.timerElement)
   this.start = () => {
     this.timerCountdown = setInterval( () => {
       this.timeOutInSecond -= 1;
@@ -17,18 +16,18 @@ function Timer ({
         clearInterval(this.timerCountdown);
         this.end();
       }
-      this.timerElement.innerHTML = timeFormat(this.timeOutInSecond)
+      this.timerElement.innerHTML = timeFormat(this.timeOutInSecond);
 
     }, 1000);
-  }
+  };
 
   this.clearTimerCountdown = () => {
-    if(this.timerCountdown) clearInterval(this.timerCountdown)
-  }
+    if(this.timerCountdown) clearInterval(this.timerCountdown);
+  };
   this.end = () => {
     this.clearTimerCountdown();
     this.onEnd();
-  }
+  };
 
   this.reset = ({
     timeOutInSecond,
@@ -37,10 +36,10 @@ function Timer ({
     this.clearTimerCountdown();
     this.timeOutInSecond = timeOutInSecond;
     this.onEnd = onEnd;
-  }
+  };
   this.getCurrentTimeout = () => {
     return this.timeOutInSecond;
-  }
+  };
   return this;
 }
 export default Timer;

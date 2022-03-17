@@ -9,31 +9,31 @@ class Question{
     if (this.checkAnswer === undefined) {
       throw new TypeError('Override checkAnswer function');
     }
-  }
+  };
 }
 
 
 export class MultiChoiceQuestion extends Question{
   constructor({content, answer, choices}){
     super({content, answer});
-    this.choices = choices
-  }
+    this.choices = choices;
+  };
   checkAnswer(userAnswer){
     if(!userAnswer) return false;
     return this.answer === userAnswer;
-  }
+  };
 }
 
 export class TextQuestion  extends Question{
   constructor({content, answer}){
     super({content, answer});
     this.keywords =  answer.match(/[A-Za-z0-9]+/g);
-  }
+  };
 
   checkAnswer(userAnswer){
     if(!userAnswer) return false;
     
-    const normalizedAnswer = userAnswer.trim().toLowerCase()
+    const normalizedAnswer = userAnswer.trim().toLowerCase();
     const userKeywords = normalizedAnswer.match(/[A-Za-z0-9]+/g);
     
     const countKeywords = {}
@@ -46,13 +46,12 @@ export class TextQuestion  extends Question{
     
     let totalCorrectKeywords = 0;
     for(let word of userKeywords){
-      const isExist = countKeywords[word]? 1:0;
+      const isExist = countKeywords[word]? 1 : 0;
       totalCorrectKeywords += isExist;
     }
-    console.log(this.keywords, countKeywords)
     // TODO: Find another way
     return totalCorrectKeywords > 0;
-  }
+  };
 }
 
 export class QuestionFactory{
@@ -64,14 +63,14 @@ export class QuestionFactory{
           content: question.content,
           answer: question.answer,
           choices: question.choices
-        }))
+        }));
       }else{
         questionInstances.push(new TextQuestion({
           content: question.content,
           answer: question.answer
-        }))
+        }));
       }
     }
     return questionInstances;
-  }
+  };
 }

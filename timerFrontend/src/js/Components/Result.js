@@ -4,8 +4,8 @@ function Result({results, timeDoneInSecond}) {
   const mark = results.reduce((mark, {
     isCorrect
   }) => {
-    return isCorrect ? mark + 1 : mark
-  }, 0)
+    return isCorrect ? mark + 1 : mark;
+  }, 0);
   const numberOfQuestions = results.length;
 
   return `
@@ -17,8 +17,8 @@ function Result({results, timeDoneInSecond}) {
     <div class= "mark__range --low"></div>
     <div class="mark__range --medium"></div>
     <div class="mark__range --high"></div>
-    <div style="width: ${mark/numberOfQuestions*100}%" class= "mark__current">
-      <span class="mark-value">${mark/numberOfQuestions*100}%</span>
+    <div style="width: ${mark / numberOfQuestions * 100}%" class= "mark__current">
+      <span class="mark-value">${mark / numberOfQuestions * 100}%</span>
     </div>
   </div>
   <div class="compare-result container">
@@ -45,8 +45,7 @@ function Result({results, timeDoneInSecond}) {
       }
     </div>
   </div>
-  
-  `
+  `;
 }
 
 export default Result;
