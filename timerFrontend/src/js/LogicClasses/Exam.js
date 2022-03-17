@@ -5,23 +5,23 @@ export default class Exam {
   #questions;
   #expiredTimeInSecond;
   #userAnswers;
-  #currentIndexQuestion;
+  #idxOfCurrentQuestion;
   
   constructor(){
     this.#questions = [];
     this.#expiredTimeInSecond = 0;
     this.#userAnswers = [];
-    this.#currentIndexQuestion = -1;
+    this.#idxOfCurrentQuestion = -1;
   };
   getCurrentQuestion = () => {
-    return this.#questions[this.#currentIndexQuestion];
+    return this.#questions[this.#idxOfCurrentQuestion];
   };
   getRandomExam = () => new Promise((resolve, reject) => {
     ExamAPI.get().then( (examInJSON) => {
       this.#questions = QuestionFactory.loadQuestions(examInJSON.questions);
       this.#expiredTimeInSecond = examInJSON.expiredTimeInSecond;
       this.#userAnswers = new Array(this.#questions.length).fill("");
-      this.#currentIndexQuestion = -1;
+      this.#idxOfCurrentQuestion = -1;
       resolve();
     }).catch((error)=>{
       reject(error);
@@ -35,32 +35,32 @@ export default class Exam {
   };
   getNextQuestion(){
     return {
-      question: this.#questions[++this.#currentIndexQuestion],
-      userAnswer: this.#userAnswers[this.#currentIndexQuestion]
+      question: this.#questions[++this.#idxOfCurrentQuestion],
+      userAnswer: this.#userAnswers[this.#idxOfCurrentQuestion]
     };
   };
   getPreviousQuestion(){
     return {
-      question: this.#questions[--this.#currentIndexQuestion],
-      userAnswer: this.#userAnswers[this.#currentIndexQuestion]
+      question: this.#questions[--this.#idxOfCurrentQuestion],
+      userAnswer: this.#userAnswers[this.#idxOfCurrentQuestion]
     };
   };
 
   hasNextQuestion(){
-    return this.#currentIndexQuestion < this.#questions.length - 1;
+    return this.#idxOfCurrentQuestion < this.#questions.length - 1;
   };
   hasPreviousQuestion(){
-    return this.#currentIndexQuestion > 0;
+    return this.#idxOfCurrentQuestion > 0;
   };
   
   setUserAnswer(answer){
-    this.#userAnswers[this.#currentIndexQuestion] = answer;
+    this.#userAnswers[this.#idxOfCurrentQuestion] = answer;
   };
   getResults(){
     const results = []
-    for(let idx =0; idx < this.#questions.length; idx++){
-      const question = this.#questions[idx];
-      const userAnswer = this.#userAnswers[idx];
+    for(let questionIdx =0; questionIdx < this.#questions.length; questionIdx++){
+      const question = this.#questions[questionIdx];
+      const userAnswer = this.#userAnswers[questionIdx];
       results.push({
         question: question.content,
         groundTruth: question.answer,

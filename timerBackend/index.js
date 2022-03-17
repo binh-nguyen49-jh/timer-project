@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require("cors");
-const http = require("http")
+const http = require("http");
 const examRoutes = require("./routes/exam.routes")
 // Set up Global configuration access
 dotenv.config();
@@ -27,8 +27,4 @@ app.use((err, req, res, next) => {
     res.status(err.status).send({
         error: err.message
     });
-})
-
-app.use((req, res, next) => {
-    console.log('get data');
-})
+});
