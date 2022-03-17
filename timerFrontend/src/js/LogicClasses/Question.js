@@ -18,8 +18,11 @@ export class MultiChoiceQuestion extends Question{
     super({content, answer});
     this.choices = choices;
   };
+  
   checkAnswer(userAnswer){
-    if(!userAnswer) return false;
+    if(!userAnswer) {
+      return false;
+    }
     return this.answer === userAnswer;
   };
 }
@@ -31,21 +34,23 @@ export class TextQuestion  extends Question{
   };
 
   checkAnswer(userAnswer){
-    if(!userAnswer) return false;
+    if (!userAnswer) {
+      return false;
+    }
     
     const normalizedAnswer = userAnswer.trim().toLowerCase();
     const userKeywords = normalizedAnswer.match(/[A-Za-z0-9]+/g);
     
     const countKeywords = {}
-    for(let word of userKeywords){
+    for (let word of userKeywords) {
       // Mark as user answer right keywords
-      if(this.keywords.indexOf(word) !== -1){
+      if (this.keywords.indexOf(word) !== -1) {
         countKeywords[word] = 1;
       }
     }
     
     let totalCorrectKeywords = 0;
-    for(let word of userKeywords){
+    for (let word of userKeywords) {
       const isExist = countKeywords[word]? 1 : 0;
       totalCorrectKeywords += isExist;
     }
@@ -57,14 +62,14 @@ export class TextQuestion  extends Question{
 export class QuestionFactory{
   static loadQuestions(questions){
     const questionInstances = [];
-    for(let question of questions){
-      if(question.choices){
+    for (let question of questions) {
+      if (question.choices) {
         questionInstances.push(new MultiChoiceQuestion({
           content: question.content,
           answer: question.answer,
           choices: question.choices
         }));
-      }else{
+      } else {
         questionInstances.push(new TextQuestion({
           content: question.content,
           answer: question.answer

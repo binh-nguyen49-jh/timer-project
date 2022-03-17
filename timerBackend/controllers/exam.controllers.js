@@ -7,11 +7,12 @@ const getRandomExam = ({res, next}) => {
     const fileNames = fs.readdirSync(process.env.FILE_DIRECTORY);
     const randomNum = Math.floor(Math.random() * fileNames.length);
     const exam = fs.readFileSync(`${process.env.FILE_DIRECTORY}/${fileNames[randomNum]}`, {encoding:'utf8', flag:'r'});
-    if(exam)
+    if (exam) {
       res.status(200).send( JSON.parse(exam));
-    else
+    } else {
       next(createErrors.InternalServerError("Something went wrong!"));
-  } catch (error) {
+    }
+  } catch(error) {
     console.error(error);
     next(createErrors.InternalServerError("Something went wrong!"));
   }

@@ -12,6 +12,7 @@ class MainComponent {
     this.initializeSectionState();
      
   };
+
   initializeSectionState () {
     this.toggleSectionState({
       isDoingExam:true
@@ -19,6 +20,7 @@ class MainComponent {
     this.mainElements.examContainer.style.display = "none";
     this.mainElements.timerElement.innerText = '00:00:00';
   };
+
   addEventListeners = () => {
     this.mainElements.timerElement.addEventListener("click", this.handleClickTimer);
     this.mainElements.nextButton.addEventListener("click", () => this.handleClickNavigateButton({
@@ -35,36 +37,37 @@ class MainComponent {
     isNextButton
   }) => {
     this.getUserAnswer();
-    if(isNextButton && !this.exam.hasNextQuestion())
+    if (isNextButton && !this.exam.hasNextQuestion()) {
       this.handleSubmit();
-    else
-    this.showQuestion({
-      isGettingNextQuestion: isNextButton
-    });
-  };
+    } else {
+      this.showQuestion({
+        isGettingNextQuestion: isNextButton
+      });
+    }
+  }
   
   getUserAnswer = () => {
     const currentQuestion =  this.exam.getCurrentQuestion();
     let userAnswer = ''
-    if(currentQuestion.choices){
+    if (currentQuestion.choices) {
       const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
-      for(let choiceCheckbox of choiceCheckboxes){
-        if(choiceCheckbox.checked){
+      for (let choiceCheckbox of choiceCheckboxes) {
+        if (choiceCheckbox.checked) {
           userAnswer = choiceCheckbox.value  
         }
       }
-    }else{
+    } else {
       userAnswer = document.querySelector('input[name="answer"]').value;
     }
     this.exam.setUserAnswer(userAnswer);
-  };
+  }
 
   handleSubmit = () => {
     this.timer.end();
   };
   
   toggleSectionState = ({isDoingExam}) => {
-    if(isDoingExam){
+    if (isDoingExam) {
       // Show element of exam section
       this.mainElements.examContainer.style.display = 'block';
       this.mainElements.questionContainer.style.display = 'block';
@@ -73,7 +76,7 @@ class MainComponent {
       this.mainElements.retestButton.style.display = 'none';
       this.mainElements.homeButton.style.display = 'none';
       this.mainElements.resultContainer.innerHTML = '';
-    }else{
+    } else {
       // Show element of result section
       this.mainElements.retestButton.style.display = 'block';
       this.mainElements.homeButton.style.display = 'block';
@@ -83,10 +86,10 @@ class MainComponent {
       this.mainElements.examContainer.style.display = 'none';
     }
   };
+
   startExam = () => {
     this.exam = new Exam();
-    this.exam.getRandomExam().then(
-      ()=>{
+    this.exam.getRandomExam().then(() => {
         this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
     
         this.timer.reset({
@@ -102,11 +105,10 @@ class MainComponent {
         this.toggleSectionState({
           isDoingExam: true
         });
-      }
-    ).catch((error)=>{
+    }).catch((error) => {
       console.error(error);
     });
-  };
+  }
 
   handleClickTimer = () => {
     this.startExam();
@@ -130,7 +132,7 @@ class MainComponent {
     isGettingNextQuestion
   }) => {
     const {question, userAnswer} = isGettingNextQuestion ? this.exam.getNextQuestion() : this.exam.getPreviousQuestion();
-    if(question){
+    if (question) {
       if (question.choices) {
         this.mainElements.questionContainer.innerHTML = Question({
           question,
@@ -145,17 +147,17 @@ class MainComponent {
         });
       }
       this.changeStateOfNavigateButton();
-      
     }
   };
 
   changeStateOfNavigateButton = () => {
     this.mainElements.backButton.disabled = !this.exam.hasPreviousQuestion();
 
-    if(!this.exam.hasNextQuestion())
-    this.mainElements.nextButton.innerText = 'Submit';
-    else
-    this.mainElements.nextButton.innerText = 'Next';
+    if (!this.exam.hasNextQuestion()) {
+      this.mainElements.nextButton.innerText = 'Submit';
+    } else {
+      this.mainElements.nextButton.innerText = 'Next';
+    }
   };
 }
 

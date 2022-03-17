@@ -13,32 +13,38 @@ export default class Exam {
     this.#userAnswers = [];
     this.#idxOfCurrentQuestion = -1;
   };
+  
   getCurrentQuestion = () => {
     return this.#questions[this.#idxOfCurrentQuestion];
   };
+  
   getRandomExam = () => new Promise((resolve, reject) => {
-    ExamAPI.get().then( (examInJSON) => {
+    ExamAPI.get().then((examInJSON) => {
       this.#questions = QuestionFactory.loadQuestions(examInJSON.questions);
       this.#expiredTimeInSecond = examInJSON.expiredTimeInSecond;
       this.#userAnswers = new Array(this.#questions.length).fill("");
       this.#idxOfCurrentQuestion = -1;
       resolve();
-    }).catch((error)=>{
+    }).catch((error) => {
       reject(error);
     });
   });
-  getExpiredTime = () => {
+
+  getExpiredTime(){
     return this.#expiredTimeInSecond;
   };
+
   getNumberOfQuestions(){
     return this.#questions.length;
   };
+
   getNextQuestion(){
     return {
       question: this.#questions[++this.#idxOfCurrentQuestion],
       userAnswer: this.#userAnswers[this.#idxOfCurrentQuestion]
     };
   };
+
   getPreviousQuestion(){
     return {
       question: this.#questions[--this.#idxOfCurrentQuestion],
@@ -56,9 +62,10 @@ export default class Exam {
   setUserAnswer(answer){
     this.#userAnswers[this.#idxOfCurrentQuestion] = answer;
   };
+
   getResults(){
     const results = []
-    for(let questionIdx =0; questionIdx < this.#questions.length; questionIdx++){
+    for (let questionIdx =0; questionIdx < this.#questions.length; questionIdx++) {
       const question = this.#questions[questionIdx];
       const userAnswer = this.#userAnswers[questionIdx];
       results.push({

@@ -10,7 +10,7 @@ function Timer ({
   this.onEnd = onEnd;
   this.timerCountdown = null;
   this.start = () => {
-    this.timerCountdown = setInterval( () => {
+    this.timerCountdown = setInterval(() => {
       this.timeOutInSecond -= 1;
       if (this.timeOutInSecond < 1) {
         clearInterval(this.timerCountdown);
@@ -22,8 +22,11 @@ function Timer ({
   };
 
   this.clearTimerCountdown = () => {
-    if(this.timerCountdown) clearInterval(this.timerCountdown);
+    if (this.timerCountdown) {
+      clearInterval(this.timerCountdown);
+    }
   };
+
   this.end = () => {
     this.clearTimerCountdown();
     this.onEnd();
@@ -37,6 +40,7 @@ function Timer ({
     this.timeOutInSecond = timeOutInSecond;
     this.onEnd = onEnd;
   };
+  
   this.getCurrentTimeout = () => {
     return this.timeOutInSecond;
   };

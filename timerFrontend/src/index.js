@@ -1,6 +1,6 @@
 import MainComponent from "./js/Components/Main"
 
-window.addEventListener("DOMContentLoaded", ()=>{
+window.addEventListener("DOMContentLoaded", () => {
   let mainComponent = new MainComponent({
     timerElement: document.getElementById("timer"),
     questionContainer: document.querySelector(".questions__container"),
@@ -11,4 +11,4 @@ window.addEventListener("DOMContentLoaded", ()=>{
     retestButton: document.querySelector(".retest-btn"),
     homeButton: document.querySelector(".home-btn")
   })
-})
+});
