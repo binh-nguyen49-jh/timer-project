@@ -2,21 +2,21 @@ import timeFormat from "../utils/timeFormat";
 
 function Timer ({
   timerElement,
-  timeOutInSecond = 0,
+  timeoutInSecond = 0,
   onEnd = () => {}
 }){
   this.timerElement = timerElement;
-  this.timeOutInSecond = timeOutInSecond;
+  this.timeoutInSecond = timeoutInSecond;
   this.onEnd = onEnd;
   this.timerCountdown = null;
   this.start = () => {
     this.timerCountdown = setInterval(() => {
-      this.timeOutInSecond -= 1;
-      if (this.timeOutInSecond < 1) {
+      this.timeoutInSecond -= 1;
+      if (this.timeoutInSecond < 1) {
         clearInterval(this.timerCountdown);
         this.end();
       }
-      this.timerElement.innerHTML = timeFormat(this.timeOutInSecond);
+      this.timerElement.innerHTML = timeFormat(this.timeoutInSecond);
     }, 1000);
   };
 
@@ -32,16 +32,16 @@ function Timer ({
   };
 
   this.reset = ({
-    timeOutInSecond,
+    timeoutInSecond,
     onEnd
   }) => {
     this.clearTimerCountdown();
-    this.timeOutInSecond = timeOutInSecond;
+    this.timeoutInSecond = timeoutInSecond;
     this.onEnd = onEnd;
   };
 
   this.getCurrentTimeout = () => {
-    return this.timeOutInSecond;
+    return this.timeoutInSecond;
   };
   return this;
 }

@@ -97,7 +97,7 @@ class MainComponent {
       `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
     
       this.timer.reset({
-        timeOutInSecond: this.exam.getExpiredTime(),
+        timeoutInSecond: this.exam.getExpiredTime(),
         onEnd: this.showResult
       });
       this.timer.start();
@@ -160,7 +160,6 @@ class MainComponent {
 
   changeStateOfNavigateButton = () => {
     this.mainElements.backButton.disabled = !this.exam.hasPreviousQuestion();
-
     if (!this.exam.hasNextQuestion()) {
       this.mainElements.nextButton.innerText = 'Submit';
     } else {
