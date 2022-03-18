@@ -1,8 +1,12 @@
+import { QUESTION_TYPES } from "../../config/config";
+
 class Question{
   constructor({
+    type,
     content, 
     answer
   }) {
+    this.type = type;
     this.content = content;
     this.answer = answer;
     if (this.constructor === Question) {
@@ -17,11 +21,13 @@ class Question{
 
 export class MultiChoiceQuestion extends Question{
   constructor({
+    type,
     content, 
     answer, 
     choices
   }) {
     super({
+      type,
       content, 
       answer
     });
@@ -38,10 +44,12 @@ export class MultiChoiceQuestion extends Question{
 
 export class TextQuestion  extends Question{
   constructor({
+    type,
     content, 
     answer
   }) {
     super({
+      type,
       content, 
       answer
     });
@@ -74,14 +82,16 @@ export class TextQuestion  extends Question{
 export function loadQuestions(questions) {
   const questionInstances = [];
   for (let question of questions) {
-    if (question.choices) {
+    if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
       questionInstances.push(new MultiChoiceQuestion({
+        type: question.type,
         content: question.content,
         answer: question.answer,
         choices: question.choices
       }));
     } else {
       questionInstances.push(new TextQuestion({
+        type: question.type,
         content: question.content,
         answer: question.answer
       }));

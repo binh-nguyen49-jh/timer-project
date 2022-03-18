@@ -4,7 +4,7 @@ import timeFormat from "../utils/timeFormat";
 import Question from "./Question";
 import Result from "./Result";
 
-class MainComponent {
+class ExamComponent {
   constructor(mainElements) {
     this.mainElements = mainElements;
     this.timer = new Timer({
@@ -48,7 +48,7 @@ class MainComponent {
   }
   
   getUserAnswer = () => {
-    const currentQuestion =  this.exam.getCurrentQuestion();
+    const currentQuestion = this.exam.getCurrentQuestion();
     let userAnswer = ''
     if (currentQuestion.choices) {
       const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
@@ -92,7 +92,7 @@ class MainComponent {
 
   startExam = () => {
     this.exam = new Exam();
-    this.exam.getRandomExam().then(() => {
+    this.exam.loadRandomExam().then(() => {
       this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = 
       `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
     
@@ -141,20 +141,15 @@ class MainComponent {
     : this.exam.getPreviousQuestion();
 
     if (question) {
-      if (question.choices) {
+      try {
         this.mainElements.questionContainer.innerHTML = Question({
           question,
-          userAnswer,
-          isTextQuestion: false
-        });
-      } else {
-        this.mainElements.questionContainer.innerHTML = Question({
-          question,
-          userAnswer,
-          isTextQuestion: true
-        });
+          userAnswer
+        });  
+        this.changeStateOfNavigateButton();
+      } catch (error) {
+        console.error(error);
       }
-      this.changeStateOfNavigateButton();
     }
   };
 
@@ -168,4 +163,4 @@ class MainComponent {
   };
 }
 
-export default MainComponent;
+export default ExamComponent;

@@ -1,7 +1,7 @@
-import MainComponent from "./js/Components/Main"
+import ExamComponent from "./js/Components/Main";
 
 window.addEventListener("DOMContentLoaded", () => {
-  let mainComponent = new MainComponent({
+  new ExamComponent({
     timerElement: document.getElementById("timer"),
     questionContainer: document.querySelector(".questions__container"),
     backButton: document.querySelector(".action .back"), 

@@ -18,7 +18,7 @@ export default class Exam {
     return this.#questions[this.#idxOfCurrentQuestion];
   };
   
-  getRandomExam = () => new Promise((resolve, reject) => {
+  loadRandomExam = () => new Promise((resolve, reject) => {
     ExamAPI.get().then((examInJSON) => {
       this.#questions = loadQuestions(examInJSON.questions);
       this.#expiredTimeInSecond = examInJSON.expiredTimeInSecond;

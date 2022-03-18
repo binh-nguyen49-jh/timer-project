@@ -1,3 +1,5 @@
+import { QUESTION_TYPES, QUESTION_UI_ERRORS } from "../../config/config";
+
 function TextQuestion({
   question, 
   userAnswer
@@ -40,10 +42,13 @@ function MultipleChoiceQuestion({
 
 export default function Question({
   question,
-  userAnswer,
-  isTextQuestion
+  userAnswer
 }) {
-  return isTextQuestion 
-  ? TextQuestion({question, userAnswer}) 
-  : MultipleChoiceQuestion({question, userAnswer});
+  if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
+    return MultipleChoiceQuestion({ question, userAnswer });
+  } else if (question.type === QUESTION_TYPES.TEXT){
+    return TextQuestion({ question, userAnswer });
+  } else {
+    throw Error(QUESTION_UI_ERRORS.NotExistingType);
+  }
 }
