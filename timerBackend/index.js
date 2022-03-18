@@ -7,9 +7,7 @@ const examRoutes = require("./routes/exam.routes")
 dotenv.config();
 const app = express();
 
-const corsOptions = {
-  origin: JSON.parse(process.env.WHITE_LIST)
-};
+const corsOptions = JSON.parse(process.env.CORS_OPTIONS);
 
 app.use(cors(corsOptions));
 app.use(express.json());

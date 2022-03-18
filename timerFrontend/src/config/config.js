@@ -8,6 +8,11 @@ export const QUESTION_UI_ERRORS = {
 }
 
 export const QUESTION_ERRORS = {
-  instantiateAnAbstractClass: "You cannot create an instance of Abstract Class",
-  notImplementCheckAnswerFunction: "You did not implement the checkAnswer function"
+  InstantiateAnAbstractClass: "You cannot create an instance of Abstract Class",
+  NotImplementCheckAnswerFunction: "You did not implement the checkAnswer function"
+}
+
+export const GET_USER_ANSWER_ERRORS = {
+  CannotGetUserAnswer: "Cannot get user answer",
+  NotExistingType: "The question's type is not existing"
 }

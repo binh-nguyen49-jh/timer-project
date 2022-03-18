@@ -1,3 +1,4 @@
+import { GET_USER_ANSWER_ERRORS, QUESTION_TYPES } from "../../config/config";
 import Exam from "../LogicClasses/Exam";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
@@ -8,11 +9,18 @@ class ExamComponent {
   constructor(mainElements) {
     this.mainElements = mainElements;
     this.timer = new Timer({
-        timerElement: this.mainElements.timerElement
+      timerElement: this.mainElements.timerElement
     });
+    this.getAnswerConfiguration = {};
+    this.initializeConfigurations();
     this.addEventListeners();
     this.initializeSectionState();
   };
+  
+  initializeConfigurations = () => {
+    this.getAnswerConfiguration[QUESTION_TYPES.MULTIPLE_CHOICE] = this.getMultipleChoiceQuestionAnswer;
+    this.getAnswerConfiguration[QUESTION_TYPES.TEXT] = this.getTextQuestionAnswer;
+  }
 
   initializeSectionState = () => {
     this.toggleSectionState({
@@ -37,30 +45,50 @@ class ExamComponent {
   handleClickNavigateButton = ({
     isNextButton
   }) => {
-    this.getUserAnswer();
-    if (isNextButton && !this.exam.hasNextQuestion()) {
-      this.handleSubmit();
-    } else {
-      this.showQuestion({
-        isGettingNextQuestion: isNextButton
-      });
+    try {
+      const userAnswer = this.getUserAnswer();
+      this.exam.setUserAnswer(userAnswer);
+      if (isNextButton && !this.exam.hasNextQuestion()) {
+        this.handleSubmit();
+      } else {
+        this.showQuestion({
+          isGettingNextQuestion: isNextButton
+        });
+      }
+    } catch (error) {
+      console.error(error) 
     }
   }
-  
+
+  getTextQuestionAnswer = () => {
+    const textInputElement = document.querySelector('input[name="answer"]');
+    if (textInputElement) {
+      return textInputElement.value;
+    };
+    return ''
+  }
+
+  getMultipleChoiceQuestionAnswer = () => {
+    const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
+    for (let choiceCheckbox of choiceCheckboxes) {
+      if (choiceCheckbox.checked) {
+        return choiceCheckbox.value;
+      }
+    }
+    return '';
+  }
+
   getUserAnswer = () => {
     const currentQuestion = this.exam.getCurrentQuestion();
-    let userAnswer = ''
-    if (currentQuestion.choices) {
-      const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
-      for (let choiceCheckbox of choiceCheckboxes) {
-        if (choiceCheckbox.checked) {
-          userAnswer = choiceCheckbox.value;
-        }
+    if (this.getAnswerConfiguration[currentQuestion.type]) {
+      try {
+        return this.getAnswerConfiguration[currentQuestion.type]();
+      } catch (error) {
+        throw Error(GET_USER_ANSWER_ERRORS.CannotGetUserAnswer);
       }
     } else {
-      userAnswer = document.querySelector('input[name="answer"]').value;
+      throw Error(GET_USER_ANSWER_ERRORS.NotExistingType);
     }
-    this.exam.setUserAnswer(userAnswer);
   }
 
   handleSubmit = () => {
