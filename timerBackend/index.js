@@ -8,14 +8,14 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:8080"
+  origin: JSON.parse(process.env.WHITE_LIST)
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended:  true }));
 app.use('/exam', examRoutes);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || process.env.DEFAULT_PORT;
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
