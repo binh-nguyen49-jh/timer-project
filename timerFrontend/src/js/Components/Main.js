@@ -1,4 +1,4 @@
-import { GET_USER_ANSWER_ERRORS, QUESTION_TYPES } from "../../config/config";
+import { EXAM_EVENTS, GET_USER_ANSWER_ERRORS, QUESTION_TYPES } from "../../config/config";
 import Exam from "../LogicClasses/Exam";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
@@ -11,15 +11,26 @@ class ExamComponent {
     this.timer = new Timer({
       timerElement: this.mainElements.timerElement
     });
-    this.getAnswerConfiguration = {};
-    this.initializeConfigurations();
-    this.addEventListeners();
+    this.getAnswerHandlers = {};
+    this.callbackHandlers = {};
+    this.initializeGetAnswerHandlers();
     this.initializeSectionState();
+    this.addEventListeners();
   };
   
-  initializeConfigurations = () => {
-    this.getAnswerConfiguration[QUESTION_TYPES.MULTIPLE_CHOICE] = this.getMultipleChoiceQuestionAnswer;
-    this.getAnswerConfiguration[QUESTION_TYPES.TEXT] = this.getTextQuestionAnswer;
+  initializeGetAnswerHandlers = () => {
+    this.setGetAnswerHandler({ 
+      questionType: QUESTION_TYPES.MULTIPLE_CHOICE, 
+      getAnswerHandler: this.getMultipleChoiceQuestionAnswer
+    });
+    this.setGetAnswerHandler({
+      questionType: QUESTION_TYPES.TEXT, 
+      getAnswerHandler: this.getTextQuestionAnswer
+    });
+  }
+
+  setGetAnswerHandler = ({ questionType, getAnswerHandler }) => {
+    this.getAnswerHandlers[questionType] = getAnswerHandler;
   }
 
   initializeSectionState = () => {
@@ -54,9 +65,12 @@ class ExamComponent {
         this.showQuestion({
           isGettingNextQuestion: isNextButton
         });
+      };
+      if (this.callbackHandlers[EXAM_EVENTS.ClickNavigateButton]) {
+        this.callbackHandlers[EXAM_EVENTS.ClickNavigateButton]();
       }
     } catch (error) {
-      console.error(error) 
+      console.error(error)
     }
   }
 
@@ -80,9 +94,10 @@ class ExamComponent {
 
   getUserAnswer = () => {
     const currentQuestion = this.exam.getCurrentQuestion();
-    if (this.getAnswerConfiguration[currentQuestion.type]) {
+    console.log(this.getAnswerHandlers, currentQuestion.type)
+    if (this.getAnswerHandlers[currentQuestion.type]) {
       try {
-        return this.getAnswerConfiguration[currentQuestion.type]();
+        return this.getAnswerHandlers[currentQuestion.type]();
       } catch (error) {
         throw Error(GET_USER_ANSWER_ERRORS.CannotGetUserAnswer);
       }
@@ -95,26 +110,34 @@ class ExamComponent {
     this.timer.end();
   };
   
+  changeToExamState = () => {
+    // Show element of exam section
+    this.mainElements.examContainer.style.display = 'block';
+    this.mainElements.questionContainer.style.display = 'block';
+    this.mainElements.timerElement.style.display = 'block';
+    // Hide element of result section
+    this.mainElements.retestButton.style.display = 'none';
+    this.mainElements.homeButton.style.display = 'none';
+    this.mainElements.resultContainer.innerHTML = '';
+  }
+
+  changeToResultState = () => {
+    // Show element of result section
+    this.mainElements.retestButton.style.display = 'block';
+    this.mainElements.homeButton.style.display = 'block';
+    // Hide element of exam section
+    this.mainElements.timerElement.style.display = 'none';
+    this.mainElements.questionContainer.style.display = 'none';
+    this.mainElements.examContainer.style.display = 'none';
+  }
+
   toggleSectionState = ({
     isDoingExam
   }) => {
     if (isDoingExam) {
-      // Show element of exam section
-      this.mainElements.examContainer.style.display = 'block';
-      this.mainElements.questionContainer.style.display = 'block';
-      this.mainElements.timerElement.style.display = 'block';
-      // Hide element of result section
-      this.mainElements.retestButton.style.display = 'none';
-      this.mainElements.homeButton.style.display = 'none';
-      this.mainElements.resultContainer.innerHTML = '';
+      this.changeToExamState();
     } else {
-      // Show element of result section
-      this.mainElements.retestButton.style.display = 'block';
-      this.mainElements.homeButton.style.display = 'block';
-      // Hide element of exam section
-      this.mainElements.timerElement.style.display = 'none';
-      this.mainElements.questionContainer.style.display = 'none';
-      this.mainElements.examContainer.style.display = 'none';
+      this.changeToResultState();
     }
   };
 
@@ -161,24 +184,36 @@ class ExamComponent {
     });
   };
 
+  getQuestion = ({
+    isGettingNextQuestion
+  }) => {
+    return isGettingNextQuestion 
+    ? this.exam.getNextQuestion() 
+    : this.exam.getPreviousQuestion();
+  }
+
+  renderQuestion = ({
+    question,
+    userAnswer
+  }) => {
+    this.mainElements.questionContainer.innerHTML = Question({
+      question,
+      userAnswer
+    });
+  }
+
   showQuestion = ({
     isGettingNextQuestion
   }) => {
-    const { question, userAnswer } = isGettingNextQuestion 
-    ? this.exam.getNextQuestion() 
-    : this.exam.getPreviousQuestion();
-
+    const { question, userAnswer } = this.getQuestion({ isGettingNextQuestion });
     if (question) {
       try {
-        this.mainElements.questionContainer.innerHTML = Question({
-          question,
-          userAnswer
-        });  
+        this.renderQuestion({ question, userAnswer });
         this.changeStateOfNavigateButton();
       } catch (error) {
         console.error(error);
       }
-    }
+    };
   };
 
   changeStateOfNavigateButton = () => {

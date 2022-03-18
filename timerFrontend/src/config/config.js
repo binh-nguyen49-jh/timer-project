@@ -16,3 +16,10 @@ export const GET_USER_ANSWER_ERRORS = {
   CannotGetUserAnswer: "Cannot get user answer",
   NotExistingType: "The question's type is not existing"
 }
+
+export const EXAM_EVENTS = {
+  ClickTimer: "ClickTimerButton",
+  ClickRetestButton: "ClickRetestButton",
+  ClickNavigateButton: "ClickNavigateButton",
+  ClickHomeButton: "ClickHomeButton"
+}
