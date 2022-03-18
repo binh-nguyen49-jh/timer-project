@@ -1,4 +1,4 @@
-import { QUESTION_TYPES } from "../../config/config";
+import { QUESTION_ERRORS, QUESTION_TYPES } from "../../config/config";
 
 class Question{
   constructor({
@@ -10,10 +10,10 @@ class Question{
     this.content = content;
     this.answer = answer;
     if (this.constructor === Question) {
-      throw new Error("You cannot create an instance of Abstract Class");
+      throw new Error(QUESTION_ERRORS.instantiateAnAbstractClass);
     };
     if (this.checkAnswer === undefined) {
-      throw new TypeError('Override checkAnswer function');
+      throw new TypeError(QUESTION_ERRORS.notImplementCheckAnswerFunction);
     };
   };
 }
