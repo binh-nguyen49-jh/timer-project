@@ -17,7 +17,6 @@ function Timer ({
         this.end();
       }
       this.timerElement.innerHTML = timeFormat(this.timeOutInSecond);
-
     }, 1000);
   };
 
@@ -40,7 +39,7 @@ function Timer ({
     this.timeOutInSecond = timeOutInSecond;
     this.onEnd = onEnd;
   };
-  
+
   this.getCurrentTimeout = () => {
     return this.timeOutInSecond;
   };

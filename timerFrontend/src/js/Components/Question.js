@@ -43,5 +43,7 @@ export default function Question({
   userAnswer,
   isTextQuestion
 }) {
-  return isTextQuestion ? TextQuestion({question, userAnswer}) : MultipleChoiceQuestion({question, userAnswer});
+  return isTextQuestion 
+  ? TextQuestion({question, userAnswer}) 
+  : MultipleChoiceQuestion({question, userAnswer});
 }

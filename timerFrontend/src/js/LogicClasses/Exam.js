@@ -55,6 +55,7 @@ export default class Exam {
   hasNextQuestion() {
     return this.#idxOfCurrentQuestion < this.#questions.length - 1;
   };
+  
   hasPreviousQuestion() {
     return this.#idxOfCurrentQuestion > 0;
   };
@@ -65,7 +66,7 @@ export default class Exam {
 
   getResults() {
     const results = []
-    for (let questionIdx =0; questionIdx < this.#questions.length; questionIdx++) {
+    for (let questionIdx = 0; questionIdx < this.#questions.length; questionIdx++) {
       const question = this.#questions[questionIdx];
       const userAnswer = this.#userAnswers[questionIdx];
       results.push({

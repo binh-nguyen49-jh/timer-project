@@ -33,11 +33,6 @@ After clone this repository, we run the below commands:
 - js: where we put our .js file to handle the logic of our website
   - libs: where .js files of which libraries we use
   - index.js: the main js file that includes necessary modules
-- scss:
-  - style.scss: includes all .scss files we have
-  - import/
-    - core/\*.scss: those files like Bootrap
-    - pages/\*.scss: Each file contains style sheet of each page of our website
 
 ### Create new html file
 

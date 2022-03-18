@@ -6,7 +6,13 @@ const getRandomExam = ({res, next}) => {
   try {  
     const fileNames = fs.readdirSync(process.env.FILE_DIRECTORY);
     const randomNum = Math.floor(Math.random() * fileNames.length);
-    const exam = fs.readFileSync(`${process.env.FILE_DIRECTORY}/${fileNames[randomNum]}`, {encoding:'utf8', flag:'r'});
+    const exam = fs.readFileSync(
+      `${process.env.FILE_DIRECTORY}/${fileNames[randomNum]}`, 
+      {
+        encoding:'utf8', 
+        flag:'r'
+      }
+    );
     if (exam) {
       res.status(200).send( JSON.parse(exam));
     } else {

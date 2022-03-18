@@ -1,6 +1,9 @@
 
 class Question{
-  constructor({content, answer}) {
+  constructor({
+    content, 
+    answer
+  }) {
     this.content = content;
     this.answer = answer;
     if (this.constructor === Question) {
@@ -14,8 +17,15 @@ class Question{
 
 
 export class MultiChoiceQuestion extends Question{
-  constructor({content, answer, choices}) {
-    super({content, answer});
+  constructor({
+    content, 
+    answer, 
+    choices
+  }) {
+    super({
+      content, 
+      answer
+    });
     this.choices = choices;
   };
 
@@ -28,8 +38,14 @@ export class MultiChoiceQuestion extends Question{
 }
 
 export class TextQuestion  extends Question{
-  constructor({content, answer}) {
-    super({content, answer});
+  constructor({
+    content, 
+    answer
+  }) {
+    super({
+      content, 
+      answer
+    });
     this.keywords =  answer.match(/[A-Za-z0-9]+/g);
   };
 

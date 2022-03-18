@@ -7,7 +7,9 @@ import Result from "./Result";
 class MainComponent {
   constructor(mainElements) {
     this.mainElements = mainElements;
-    this.timer = new Timer({timerElement: this.mainElements.timerElement});
+    this.timer = new Timer({
+        timerElement: this.mainElements.timerElement
+    });
     this.addEventListeners();
     this.initializeSectionState();
   };
@@ -28,8 +30,8 @@ class MainComponent {
     this.mainElements.backButton.onclick =  () => this.handleClickNavigateButton({
       isNextButton: false
     });
-    this.mainElements.retestButton.onclick =  () => this.handleClickRetestButton();
-    this.mainElements.homeButton.onclick =  () => this.initializeSectionState();
+    this.mainElements.retestButton.onclick =  this.handleClickRetestButton;
+    this.mainElements.homeButton.onclick =  this.initializeSectionState;
   };
 
   handleClickNavigateButton = ({
@@ -91,7 +93,8 @@ class MainComponent {
   startExam = () => {
     this.exam = new Exam();
     this.exam.getRandomExam().then(() => {
-        this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
+        this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = 
+        `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
     
         this.timer.reset({
           timeOutInSecond: this.exam.getExpiredTime(),
@@ -125,7 +128,7 @@ class MainComponent {
     // Render HTML based on the results 
     this.mainElements.resultContainer.innerHTML = Result({
       results, 
-      timeDoneInSecond: this.exam.getExpiredTime() -this.timer.getCurrentTimeout()
+      timeDoneInSecond: this.exam.getExpiredTime() - this.timer.getCurrentTimeout()
     });
     this.toggleSectionState({
       isDoingExam: false
@@ -135,7 +138,10 @@ class MainComponent {
   showQuestion = ({
     isGettingNextQuestion
   }) => {
-    const { question, userAnswer } = isGettingNextQuestion ? this.exam.getNextQuestion() : this.exam.getPreviousQuestion();
+    const { question, userAnswer } = isGettingNextQuestion 
+    ? this.exam.getNextQuestion() 
+    : this.exam.getPreviousQuestion();
+    
     if (question) {
       if (question.choices) {
         this.mainElements.questionContainer.innerHTML = Question({
