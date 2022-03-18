@@ -1,7 +1,6 @@
 const fs = require("fs");
 const createErrors  = require("http-errors");
 
-
 const getRandomExam = ({res, next}) => {
   try {  
     const fileNames = fs.readdirSync(process.env.FILE_DIRECTORY);

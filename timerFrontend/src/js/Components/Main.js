@@ -54,7 +54,7 @@ class MainComponent {
       const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
       for (let choiceCheckbox of choiceCheckboxes) {
         if (choiceCheckbox.checked) {
-          userAnswer = choiceCheckbox.value  
+          userAnswer = choiceCheckbox.value;
         }
       }
     } else {
@@ -93,22 +93,20 @@ class MainComponent {
   startExam = () => {
     this.exam = new Exam();
     this.exam.getRandomExam().then(() => {
-        this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = 
-        `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
+      this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = 
+      `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
     
-        this.timer.reset({
-          timeOutInSecond: this.exam.getExpiredTime(),
-          onEnd: this.showResult
-        });
-        
-        this.timer.start();
-
-        this.showQuestion({
-          isGettingNextQuestion: true
-        });
-        this.toggleSectionState({
-          isDoingExam: true
-        });
+      this.timer.reset({
+        timeOutInSecond: this.exam.getExpiredTime(),
+        onEnd: this.showResult
+      });
+      this.timer.start();
+      this.showQuestion({
+        isGettingNextQuestion: true
+      });
+      this.toggleSectionState({
+        isDoingExam: true
+      });
     }).catch((error) => {
       console.error(error);
     });
@@ -141,7 +139,7 @@ class MainComponent {
     const { question, userAnswer } = isGettingNextQuestion 
     ? this.exam.getNextQuestion() 
     : this.exam.getPreviousQuestion();
-    
+
     if (question) {
       if (question.choices) {
         this.mainElements.questionContainer.innerHTML = Question({
