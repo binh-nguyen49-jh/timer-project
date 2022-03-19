@@ -1,5 +1,6 @@
 import { EXAM_EVENTS, GET_USER_ANSWER_ERRORS, QUESTION_TYPES, SECTION_ERRORS, SECTION_STATES } from "../../config/config";
 import Exam from "../LogicClasses/Exam";
+import SectionState from "../LogicClasses/SectionState";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
 import QuestionUIFactory from "./Question";
@@ -12,29 +13,16 @@ class ExamComponent {
       timerElement: this.mainElements.timerElement
     });
     this.questionUIFactory = new QuestionUIFactory();
+    this.sectionState = new SectionState();
     this.getAnswerHandlers = {};
     this.callbackHandlers = {};
-    this.sectionStateHandlers = {};
-    this.initializeSectionStateHandlers();
     this.initializeGetAnswerHandlers();
-    this.changeSectionState(SECTION_STATES.initial);
+    this.sectionState.changeSectionState({
+      state: SECTION_STATES.initial,
+      mainElements
+    });
     this.addEventListeners();
   };
-  
-  initializeSectionStateHandlers = () => {
-    this.setSectionStateHandler({
-      sectionState: SECTION_STATES.initial, 
-      handler: this.initializeSectionState
-    });
-    this.setSectionStateHandler({
-      sectionState: SECTION_STATES.doingExam, 
-      handler: this.changeToExamState
-    });
-    this.setSectionStateHandler({
-      sectionState: SECTION_STATES.viewingResult, 
-      handler: this.changeToResultState
-    });
-  }
 
   runCallbackFunctionIfExist = (event, args) => {
     if (this.callbackHandlers[event]) {
@@ -46,7 +34,7 @@ class ExamComponent {
     sectionState,
     handler
   }) => {
-    this.sectionStateHandlers[sectionState] = handler;
+    this.sectionState.setSectionStateHandler({ sectionState, handler });
   }
 
   initializeGetAnswerHandlers = () => {
@@ -79,12 +67,6 @@ class ExamComponent {
     this.callbackHandlers[examEvent] = callback;
   }
 
-  initializeSectionState = ({ mainElements }) => {
-    this.changeSectionState(SECTION_STATES.doingExam);
-    mainElements.examContainer.style.display = "none";
-    mainElements.timerElement.innerText = '00:00:00';
-  };
-
   addEventListeners = () => {
     this.mainElements.timerElement.onclick =  () => {
       this.startExam();
@@ -101,7 +83,10 @@ class ExamComponent {
       this.runCallbackFunctionIfExist(EXAM_EVENTS.clickRetestButton, null);
     };
     this.mainElements.homeButton.onclick =  () => {
-      this.changeSectionState(SECTION_STATES.initial)
+      this.sectionState.changeSectionState({
+        state: SECTION_STATES.initial,
+        mainElements: this.mainElements
+      })
       this.runCallbackFunctionIfExist(EXAM_EVENTS.clickHomeButton, null);
     };
   };
@@ -160,36 +145,6 @@ class ExamComponent {
   handleSubmit = () => {
     this.timer.end();
   };
-  
-  changeToExamState = ({ mainElements }) => {
-    // Show element of exam section
-    mainElements.examContainer.style.display = 'block';
-    mainElements.questionContainer.style.display = 'block';
-    mainElements.timerElement.style.display = 'block';
-    // Hide element of result section
-    mainElements.retestButton.style.display = 'none';
-    mainElements.homeButton.style.display = 'none';
-    mainElements.resultContainer.innerHTML = '';
-  }
-
-  changeToResultState = ({ mainElements }) => {
-    // Show element of result section
-    mainElements.retestButton.style.display = 'block';
-    mainElements.homeButton.style.display = 'block';
-    // Hide element of exam section
-    mainElements.timerElement.style.display = 'none';
-    mainElements.questionContainer.style.display = 'none';
-    mainElements.examContainer.style.display = 'none';
-  }
-
-  changeSectionState = (sectionState) => {
-    if(this.sectionStateHandlers[sectionState]){
-      this.sectionStateHandlers[sectionState]({ mainElements: this.mainElements })
-    }else{
-      throw Error(SECTION_ERRORS.NotExistingHandler(sectionState));
-    }
-  };
-
 
   startExam = () => {
     this.exam = this.getNewExam();
@@ -204,7 +159,10 @@ class ExamComponent {
       this.showQuestion({
         isGettingNextQuestion: true
       });
-      this.changeSectionState(SECTION_STATES.doingExam);
+      this.sectionState.changeSectionState({
+        state: SECTION_STATES.doingExam,
+        mainElements: this.mainElements
+      });
     }).catch((error) => {
       console.error(error);
     });
@@ -232,7 +190,10 @@ class ExamComponent {
       results, 
       timeDoneInSecond: exam.getExpiredTime() - timer.getCurrentTimeout()
     });
-    this.changeSectionState(SECTION_STATES.viewingResult);
+    this.sectionState.changeSectionState({
+      state: SECTION_STATES.viewingResult,
+      mainElements: this.mainElements
+    });
     this.runCallbackFunctionIfExist(SECTION_STATES.viewingResult, { results });
   };
 
