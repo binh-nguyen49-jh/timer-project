@@ -1,7 +1,8 @@
+import { EXAM_EVENTS, SECTION_STATES } from "./config/config";
 import ExamComponent from "./js/Components/Main";
 
 window.addEventListener("DOMContentLoaded", () => {
-  new ExamComponent({
+  const examComponent = new ExamComponent({
     timerElement: document.getElementById("timer"),
     questionContainer: document.querySelector(".questions__container"),
     backButton: document.querySelector(".action .back"), 
@@ -10,5 +11,11 @@ window.addEventListener("DOMContentLoaded", () => {
     examContainer: document.querySelector(".exam__container"),
     retestButton: document.querySelector(".retest-btn"),
     homeButton: document.querySelector(".home-btn")
+  })
+  examComponent.setCallbackHandler({
+    examEvent: SECTION_STATES.viewingResult,
+    callback: ({ results }) => {
+      console.log(results)
+    }
   })
 });

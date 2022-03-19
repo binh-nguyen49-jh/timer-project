@@ -23,11 +23,17 @@ export const EXAM_EVENTS = {
   clickTimer: "ClickTimerButton",
   clickRetestButton: "ClickRetestButton",
   clickNavigateButton: "ClickNavigateButton",
-  clickHomeButton: "ClickHomeButton"
+  clickHomeButton: "ClickHomeButton",
+  timeout: "Timeout"
 }
 
 export const SECTION_STATES = {
   initial: "InitialState",
   doingExam: "DoingExam",
   viewingResult: "ViewingResult"
+}
+
+export const SECTION_ERRORS = {
+  NotExistingState: (state) => `${state} is not an existing section state`,
+  NotExistingHandler: (state) => `There is no implemented handler for ${state} section state`
 }
