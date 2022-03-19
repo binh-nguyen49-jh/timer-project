@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cors = require("cors");
 const http = require("http");
 const examRoutes = require("./routes/exam.routes")
-// Set up Global configuration access
+
 dotenv.config();
 const app = express();
 
@@ -19,8 +19,8 @@ const server = http.createServer(app);
 server.listen(PORT, () => {
   console.log(`Server is up and running on ${PORT} ...`);
 });
-// Socket & Error handler middleware
-app.use((err, req, res, next) => {
+
+app.use(({err, res}) => {
   if(err)
   res.status(err.status).send({
     error: err.message

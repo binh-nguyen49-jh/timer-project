@@ -5,6 +5,7 @@ import SectionState from "../LogicClasses/SectionState";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
 import QuestionUIFactory from "./Question";
+import { QuestionResultUIFactory } from "./Result";
 import Result from "./Result";
 
 class ExamComponent {
@@ -14,6 +15,7 @@ class ExamComponent {
       timerElement: this.mainElements.timerElement
     });
     this.questionUIFactory = new QuestionUIFactory();
+    this.questionResultUIFactory = new QuestionResultUIFactory();
     this.sectionState = new SectionState();
     this.getAnswerStrategy = new GetAnswerStrategy();
     this.callbackHandlers = {};
@@ -55,6 +57,12 @@ class ExamComponent {
   withQuestionUIFactory = (questionUIFactory) => {
     if (questionUIFactory) {
       this.questionUIFactory = questionUIFactory;
+    }
+  }
+  
+  withQuestionResultUIFactory = (questionResultUIFactory) => {
+    if (questionResultUIFactory) {
+      this.questionResultUIFactory = questionResultUIFactory;
     }
   }
 
@@ -154,7 +162,8 @@ class ExamComponent {
     // Render HTML based on the results 
     mainElements.resultContainer.innerHTML = Result({
       results, 
-      timeDoneInSecond: exam.getExpiredTime() - timer.getCurrentTimeout()
+      timeDoneInSecond: exam.getExpiredTime() - timer.getCurrentTimeout(),
+      questionResultUIFactory: this.questionResultUIFactory
     });
     this.sectionState.changeSectionState({
       state: SECTION_STATES.viewingResult,

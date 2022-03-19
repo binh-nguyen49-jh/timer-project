@@ -53,7 +53,7 @@ export class TextQuestion  extends Question{
       content, 
       answer
     });
-    this.keywords =  answer.match(/[A-Za-z0-9]+/g);
+    this.keywords =  answer.trim().toLowerCase().split(", ");
   };
 
   checkAnswer(userAnswer) {
@@ -61,7 +61,7 @@ export class TextQuestion  extends Question{
       return false;
     }
     const normalizedAnswer = userAnswer.trim().toLowerCase();
-    const userKeywords = normalizedAnswer.match(/[A-Za-z0-9]+/g);
+    const userKeywords = normalizedAnswer.split(", ");
     const countKeywords = {}
     for (let word of userKeywords) {
       // Mark as user answer right keywords
