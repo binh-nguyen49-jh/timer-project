@@ -1,5 +1,6 @@
 import { EXAM_EVENTS, GET_USER_ANSWER_ERRORS, QUESTION_TYPES, SECTION_ERRORS, SECTION_STATES } from "../../config/config";
 import Exam from "../LogicClasses/Exam";
+import GetAnswerStrategy from "../LogicClasses/GetAnswerStrategy";
 import SectionState from "../LogicClasses/SectionState";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
@@ -14,9 +15,8 @@ class ExamComponent {
     });
     this.questionUIFactory = new QuestionUIFactory();
     this.sectionState = new SectionState();
-    this.getAnswerHandlers = {};
+    this.getAnswerStrategy = new GetAnswerStrategy();
     this.callbackHandlers = {};
-    this.initializeGetAnswerHandlers();
     this.sectionState.changeSectionState({
       state: SECTION_STATES.initial,
       mainElements
@@ -30,21 +30,20 @@ class ExamComponent {
     }
   }
   
+  setGetAnswerHandler = ({ questionType, getAnswerHandler }) => {
+    this.getAnswerStrategy.setGetAnswerHandler({ 
+      questionType, 
+      getAnswerHandler 
+    });
+  }
+
   setSectionStateHandler = ({
     sectionState,
     handler
   }) => {
-    this.sectionState.setSectionStateHandler({ sectionState, handler });
-  }
-
-  initializeGetAnswerHandlers = () => {
-    this.setGetAnswerHandler({ 
-      questionType: QUESTION_TYPES.multipleChoice, 
-      getAnswerHandler: this.getMultipleChoiceQuestionAnswer
-    });
-    this.setGetAnswerHandler({
-      questionType: QUESTION_TYPES.text, 
-      getAnswerHandler: this.getTextQuestionAnswer
+    this.sectionState.setSectionStateHandler({ 
+      sectionState, 
+      handler 
     });
   }
 
@@ -57,10 +56,6 @@ class ExamComponent {
     if (questionUIFactory) {
       this.questionUIFactory = questionUIFactory;
     }
-  }
-
-  setGetAnswerHandler = ({ questionType, getAnswerHandler }) => {
-    this.getAnswerHandlers[questionType] = getAnswerHandler;
   }
 
   setCallbackHandler = ({ examEvent, callback }) => {
@@ -95,7 +90,10 @@ class ExamComponent {
     isNextButton
   }) => {
     try {
-      const userAnswer = this.getUserAnswer();
+      const currentQuestion = this.exam.getCurrentQuestion();
+      const userAnswer = this.getAnswerStrategy.getAnswer({
+        questionType: currentQuestion.type
+      });
       this.exam.setUserAnswer(userAnswer);
       if (isNextButton && !this.exam.hasNextQuestion()) {
         this.handleSubmit();
@@ -107,38 +105,6 @@ class ExamComponent {
       this.runCallbackFunctionIfExist(EXAM_EVENTS.clickNavigateButton, null);
     } catch (error) {
       console.error(error)
-    }
-  }
-
-  getTextQuestionAnswer = () => {
-    const textInputElement = document.querySelector('input[name="answer"]');
-    if (textInputElement) {
-      return textInputElement.value;
-    };
-    return ''
-  }
-
-  getMultipleChoiceQuestionAnswer = () => {
-    const choiceCheckboxes = document.querySelectorAll('input[name="choice"]');
-    for (let choiceCheckbox of choiceCheckboxes) {
-      if (choiceCheckbox.checked) {
-        return choiceCheckbox.value;
-      }
-    }
-    return '';
-  }
-
-  getUserAnswer = () => {
-    const currentQuestion = this.exam.getCurrentQuestion();
-    console.log(this.getAnswerHandlers, currentQuestion.type)
-    if (this.getAnswerHandlers[currentQuestion.type]) {
-      try {
-        return this.getAnswerHandlers[currentQuestion.type]();
-      } catch (error) {
-        throw Error(GET_USER_ANSWER_ERRORS.CannotGetUserAnswer);
-      }
-    } else {
-      throw Error(GET_USER_ANSWER_ERRORS.NotExistingType);
     }
   }
 

@@ -55,7 +55,6 @@ export default class SectionState{
   }
 
   changeSectionState = ({ state, mainElements }) => {
-      console.log(state, mainElements)
     if(this.sectionStateHandlers[state]){
       this.sectionStateHandlers[state]({ mainElements })
     }else{
