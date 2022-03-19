@@ -219,13 +219,11 @@ class ExamComponent {
   }
 
   renderQuestion = ({
-    question,
-    userAnswer
+    mainElements,
+    questionUIFactory, 
+    renderData
   }) => {
-    this.mainElements.questionContainer.innerHTML = this.questionUIFactory.renderQuestion({
-      question,
-      userAnswer
-    });
+    mainElements.questionContainer.innerHTML = questionUIFactory.renderQuestion(renderData);
   }
 
   showQuestion = ({
@@ -234,20 +232,27 @@ class ExamComponent {
     const { question, userAnswer } = this.getQuestion({ isGettingNextQuestion });
     if (question) {
       try {
-        this.renderQuestion({ question, userAnswer });
-        this.changeStateOfNavigateButton();
+        this.renderQuestion({
+          mainElements: this.mainElements, 
+          questionUIFactory: this.questionUIFactory, 
+          renderData: { question, userAnswer }
+        });
+        this.changeStateOfNavigateButton({
+          mainElements: this.mainElements,
+          exam: this.exam
+        });
       } catch (error) {
         console.error(error);
       }
     };
   };
 
-  changeStateOfNavigateButton = () => {
-    this.mainElements.backButton.disabled = !this.exam.hasPreviousQuestion();
-    if (!this.exam.hasNextQuestion()) {
-      this.mainElements.nextButton.innerText = 'Submit';
+  changeStateOfNavigateButton = ({ mainElements, exam }) => {
+    mainElements.backButton.disabled = !exam.hasPreviousQuestion();
+    if (!exam.hasNextQuestion()) {
+      mainElements.nextButton.innerText = 'Submit';
     } else {
-      this.mainElements.nextButton.innerText = 'Next';
+      mainElements.nextButton.innerText = 'Next';
     }
   };
 }
