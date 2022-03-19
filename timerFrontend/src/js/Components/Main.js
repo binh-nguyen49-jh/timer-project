@@ -1,4 +1,4 @@
-import { EXAM_EVENTS, GET_USER_ANSWER_ERRORS, QUESTION_TYPES, SECTION_ERRORS, SECTION_STATES } from "../../config/config";
+import { EXAM_EVENTS, SECTION_STATES } from "../../config/config";
 import Exam from "../LogicClasses/Exam";
 import GetAnswerStrategy from "../LogicClasses/GetAnswerStrategy";
 import SectionState from "../LogicClasses/SectionState";

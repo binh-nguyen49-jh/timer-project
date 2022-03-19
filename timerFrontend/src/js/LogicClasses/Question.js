@@ -1,4 +1,4 @@
-import { CLASS_ERRORS, QUESTION_ERRORS, QUESTION_FACTORY_ERRORS, QUESTION_TYPES } from "../../config/config";
+import { CLASS_ERRORS, QUESTION_ERRORS, QUESTION_TYPES } from "../../config/config";
 
 class Question{
   constructor({

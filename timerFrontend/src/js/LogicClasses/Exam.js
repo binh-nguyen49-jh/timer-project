@@ -1,5 +1,5 @@
 import ExamAPI from "../API/ExamAPI";
-import { loadQuestions, MultiChoiceQuestion, QuestionFactory, TextQuestion } from "./Question";
+import { QuestionFactory } from "./Question";
 
 export default class Exam {
   #questions;
