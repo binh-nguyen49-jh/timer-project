@@ -1,4 +1,4 @@
-import { QUESTION_ERRORS, QUESTION_TYPES } from "../../config/config";
+import { CLASS_ERRORS, QUESTION_ERRORS, QUESTION_FACTORY_ERRORS, QUESTION_TYPES } from "../../config/config";
 
 class Question{
   constructor({
@@ -10,7 +10,7 @@ class Question{
     this.content = content;
     this.answer = answer;
     if (this.constructor === Question) {
-      throw new Error(QUESTION_ERRORS.instantiateAnAbstractClass);
+      throw new Error(CLASS_ERRORS.instantiateAnAbstractClass);
     };
     if (this.checkAnswer === undefined) {
       throw new TypeError(QUESTION_ERRORS.notImplementCheckAnswerFunction);
@@ -19,7 +19,7 @@ class Question{
 }
 
 
-export class MultiChoiceQuestion extends Question{
+export class MultipleChoiceQuestion extends Question{
   constructor({
     type,
     content, 
@@ -79,23 +79,46 @@ export class TextQuestion  extends Question{
   };
 }
 
-export function loadQuestions(questions) {
-  const questionInstances = [];
-  for (let question of questions) {
-    if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
-      questionInstances.push(new MultiChoiceQuestion({
-        type: question.type,
-        content: question.content,
-        answer: question.answer,
-        choices: question.choices
-      }));
-    } else {
-      questionInstances.push(new TextQuestion({
-        type: question.type,
-        content: question.content,
-        answer: question.answer
-      }));
+export class QuestionFactoryAbstract{
+  constructor(questionTypeMapper){
+    this.questionTypeMapper = {};
+    if (questionTypeMapper) {
+      Object.assign(this.questionTypeMapper, questionTypeMapper);
+    };
+    if (this.constructor === QuestionFactoryAbstract) {
+      throw new Error(CLASS_ERRORS.instantiateAnAbstractClass);
+    };
+  }
+  
+  setQuestionTypeMapping = ({ questionType, questionClass }) => {
+    this.questionTypeMapper[questionType] = questionClass;
+  }
+}
+
+export class QuestionFactory extends QuestionFactoryAbstract{
+  constructor(questionTypeMapper){
+    super(questionTypeMapper);
+    if(!questionTypeMapper){
+      this.setQuestionTypeMapping({
+        questionType: QUESTION_TYPES.multipleChoice, 
+        questionClass: MultipleChoiceQuestion
+      });
+      this.setQuestionTypeMapping({
+        questionType: QUESTION_TYPES.text, 
+        questionClass: TextQuestion
+      });
     }
   }
-  return questionInstances;
-};
+
+  loadQuestions(questions) {
+    const questionInstances = [];
+    for (let question of questions) {
+      if (this.questionTypeMapper[question.type]) {
+        questionInstances.push(new this.questionTypeMapper[question.type](question));
+      } else {
+        throw Error(QUESTION_ERRORS.NotExistingType);
+      }
+    }
+    return questionInstances;
+  };
+}

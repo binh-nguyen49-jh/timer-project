@@ -1,15 +1,17 @@
-export const QUESTION_TYPES = {
-  MULTIPLE_CHOICE: "multiple_choice",
-  TEXT: "text"
+export const CLASS_ERRORS = {
+  InstantiateAnAbstractClass: "You cannot create an instance of Abstract Class"
 }
-
-export const QUESTION_UI_ERRORS = {
-  NotExistingType: "The question's type is not existing"
+export const QUESTION_TYPES = {
+  multipleChoice: "multiple_choice",
+  text: "text"
 }
 
 export const QUESTION_ERRORS = {
-  InstantiateAnAbstractClass: "You cannot create an instance of Abstract Class",
-  NotImplementCheckAnswerFunction: "You did not implement the checkAnswer function"
+  NotImplementCheckAnswerFunction: "You did not implement the checkAnswer function",
+  NotExistingType: "The question's type is not existing"
+}
+export const QUESTION_FACTORY_ERRORS = {
+  NotImplementProduceQuestion: "You did not implement the produceQuestion function"
 }
 
 export const GET_USER_ANSWER_ERRORS = {
@@ -18,8 +20,14 @@ export const GET_USER_ANSWER_ERRORS = {
 }
 
 export const EXAM_EVENTS = {
-  ClickTimer: "ClickTimerButton",
-  ClickRetestButton: "ClickRetestButton",
-  ClickNavigateButton: "ClickNavigateButton",
-  ClickHomeButton: "ClickHomeButton"
+  clickTimer: "ClickTimerButton",
+  clickRetestButton: "ClickRetestButton",
+  clickNavigateButton: "ClickNavigateButton",
+  clickHomeButton: "ClickHomeButton"
+}
+
+export const SECTION_STATES = {
+  initial: "InitialState",
+  doingExam: "DoingExam",
+  viewingResult: "ViewingResult"
 }

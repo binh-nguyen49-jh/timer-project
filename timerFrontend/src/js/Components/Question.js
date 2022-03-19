@@ -1,4 +1,5 @@
-import { QUESTION_TYPES, QUESTION_UI_ERRORS } from "../../config/config";
+import { QUESTION_TYPES, QUESTION_ERRORS } from "../../config/config";
+import { QuestionFactoryAbstract } from "../LogicClasses/Question";
 
 function TextQuestion({
   question, 
@@ -40,15 +41,26 @@ function MultipleChoiceQuestion({
   `;
 }
 
-export default function Question({
-  question,
-  userAnswer
-}) {
-  if (question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
-    return MultipleChoiceQuestion({ question, userAnswer });
-  } else if (question.type === QUESTION_TYPES.TEXT){
-    return TextQuestion({ question, userAnswer });
-  } else {
-    throw Error(QUESTION_UI_ERRORS.NotExistingType);
+export default class QuestionUIFactory extends QuestionFactoryAbstract{
+  constructor(questionTypeMapper){
+    super(questionTypeMapper)
+    if(!questionTypeMapper){
+      this.setQuestionTypeMapping({
+        questionType: QUESTION_TYPES.multipleChoice, 
+        questionClass: MultipleChoiceQuestion
+      });
+      this.setQuestionTypeMapping({
+        questionType: QUESTION_TYPES.text, 
+        questionClass: TextQuestion
+      });
+    }
+  }
+
+  renderQuestion ({ question, userAnswer }) {
+    if (this.questionTypeMapper[question.type]) {
+      return this.questionTypeMapper[question.type]({ question, userAnswer });
+    } else {
+      throw Error(QUESTION_ERRORS.NotExistingType);
+    }
   }
 }

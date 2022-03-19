@@ -1,5 +1,5 @@
 import ExamAPI from "../API/ExamAPI";
-import { loadQuestions } from "./Question";
+import { loadQuestions, MultiChoiceQuestion, QuestionFactory, TextQuestion } from "./Question";
 
 export default class Exam {
   #questions;
@@ -12,15 +12,20 @@ export default class Exam {
     this.#expiredTimeInSecond = 0;
     this.#userAnswers = [];
     this.#idxOfCurrentQuestion = -1;
+    this.questionFactory = new QuestionFactory();
   };
   
+  setQuestionTypeMapping({ questionType, questionClass }) {
+    this.questionFactory.setQuestionTypeMapping({ questionType, questionClass });
+  };
+
   getCurrentQuestion() {
     return this.#questions[this.#idxOfCurrentQuestion];
   };
   
   loadRandomExam = () => new Promise((resolve, reject) => {
     ExamAPI.get().then((examInJSON) => {
-      this.#questions = loadQuestions(examInJSON.questions);
+      this.#questions = this.questionFactory.loadQuestions(examInJSON.questions);
       this.#expiredTimeInSecond = examInJSON.expiredTimeInSecond;
       this.#userAnswers = new Array(this.#questions.length).fill("");
       this.#idxOfCurrentQuestion = -1;

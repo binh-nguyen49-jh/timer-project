@@ -2,6 +2,7 @@ import { EXAM_EVENTS, GET_USER_ANSWER_ERRORS, QUESTION_TYPES } from "../../confi
 import Exam from "../LogicClasses/Exam";
 import Timer from "../LogicClasses/Timer";
 import timeFormat from "../utils/timeFormat";
+import QuestionUIFactory from "./Question";
 import Question from "./Question";
 import Result from "./Result";
 
@@ -11,26 +12,43 @@ class ExamComponent {
     this.timer = new Timer({
       timerElement: this.mainElements.timerElement
     });
+    this.questionUIFactory = new QuestionUIFactory();
     this.getAnswerHandlers = {};
     this.callbackHandlers = {};
     this.initializeGetAnswerHandlers();
     this.initializeSectionState();
     this.addEventListeners();
+
   };
   
   initializeGetAnswerHandlers = () => {
     this.setGetAnswerHandler({ 
-      questionType: QUESTION_TYPES.MULTIPLE_CHOICE, 
+      questionType: QUESTION_TYPES.multipleChoice, 
       getAnswerHandler: this.getMultipleChoiceQuestionAnswer
     });
     this.setGetAnswerHandler({
-      questionType: QUESTION_TYPES.TEXT, 
+      questionType: QUESTION_TYPES.text, 
       getAnswerHandler: this.getTextQuestionAnswer
     });
   }
 
+  getNewExam = () => {
+    const exam = new Exam();
+    return exam;
+  }
+
+  withQuestionUIFactory = (questionUIFactory) => {
+    if (questionUIFactory) {
+      this.questionUIFactory = questionUIFactory;
+    }
+  }
+
   setGetAnswerHandler = ({ questionType, getAnswerHandler }) => {
     this.getAnswerHandlers[questionType] = getAnswerHandler;
+  }
+
+  setCallbackHandler = ({ examEvent, callback }) => {
+    this.callbackHandlers[examEvent] = callback;
   }
 
   initializeSectionState = () => {
@@ -42,15 +60,30 @@ class ExamComponent {
   };
 
   addEventListeners = () => {
-    this.mainElements.timerElement.onclick =  this.handleClickTimer;
+    this.mainElements.timerElement.onclick =  () => {
+      this.startExam();
+      if (this.callbackHandlers[EXAM_EVENTS.clickTimer]) {
+        this.callbackHandlers[EXAM_EVENTS.clickTimer]();
+      }
+    };
     this.mainElements.nextButton.onclick =  () => this.handleClickNavigateButton({
       isNextButton: true
     });
     this.mainElements.backButton.onclick =  () => this.handleClickNavigateButton({
       isNextButton: false
     });
-    this.mainElements.retestButton.onclick =  this.handleClickRetestButton;
-    this.mainElements.homeButton.onclick =  this.initializeSectionState;
+    this.mainElements.retestButton.onclick =  () => {
+      this.startExam();
+      if (this.callbackHandlers[EXAM_EVENTS.clickRetestButton]) {
+        this.callbackHandlers[EXAM_EVENTS.clickRetestButton]();
+      }
+    };
+    this.mainElements.homeButton.onclick =  () => {
+      this.initializeSectionState();
+      if (this.callbackHandlers[EXAM_EVENTS.clickHomeButton]){
+        this.callbackHandlers[EXAM_EVENTS.clickHomeButton]();
+      }
+    };
   };
 
   handleClickNavigateButton = ({
@@ -66,8 +99,8 @@ class ExamComponent {
           isGettingNextQuestion: isNextButton
         });
       };
-      if (this.callbackHandlers[EXAM_EVENTS.ClickNavigateButton]) {
-        this.callbackHandlers[EXAM_EVENTS.ClickNavigateButton]();
+      if (this.callbackHandlers[EXAM_EVENTS.clickNavigateButton]) {
+        this.callbackHandlers[EXAM_EVENTS.clickNavigateButton]();
       }
     } catch (error) {
       console.error(error)
@@ -141,8 +174,9 @@ class ExamComponent {
     }
   };
 
+
   startExam = () => {
-    this.exam = new Exam();
+    this.exam = this.getNewExam();
     this.exam.loadRandomExam().then(() => {
       this.mainElements.examContainer.querySelector("h3.exam-exp").innerHTML = 
       `Expired in <strong>${timeFormat(this.exam.getExpiredTime())}</strong>`;
@@ -161,14 +195,6 @@ class ExamComponent {
     }).catch((error) => {
       console.error(error);
     });
-  }
-
-  handleClickTimer = () => {
-    this.startExam();
-  };
-
-  handleClickRetestButton = () => {
-    this.startExam();
   };
 
   // Show mark & compare user's answer vs ground truth
@@ -196,7 +222,7 @@ class ExamComponent {
     question,
     userAnswer
   }) => {
-    this.mainElements.questionContainer.innerHTML = Question({
+    this.mainElements.questionContainer.innerHTML = this.questionUIFactory.renderQuestion({
       question,
       userAnswer
     });
