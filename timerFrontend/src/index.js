@@ -1,4 +1,4 @@
-import { EXAM_EVENTS, SECTION_STATES } from "./config/config";
+import { SECTION_STATES } from "./config/config";
 import ExamComponent from "./js/Components/Main";
 
 window.addEventListener("DOMContentLoaded", () => {

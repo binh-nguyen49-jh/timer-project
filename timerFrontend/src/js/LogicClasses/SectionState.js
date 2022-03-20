@@ -1,4 +1,5 @@
 import { SECTION_ERRORS, SECTION_STATES } from "../../config/config";
+import timeFormat from "../utils/timeFormat";
 
 export default class SectionState{
   constructor(){
@@ -30,7 +31,7 @@ export default class SectionState{
       mainElements
     });
     mainElements.examContainer.style.display = "none";
-    mainElements.timerElement.innerText = '00:00:00';
+    mainElements.timerElement.innerText = timeFormat(0);
   };
 
   changeToResultState = ({ mainElements }) => {

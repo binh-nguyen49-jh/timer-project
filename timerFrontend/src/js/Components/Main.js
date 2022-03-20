@@ -54,6 +54,12 @@ class ExamComponent {
     return exam;
   }
 
+  withGetAnswerStrategy = (getAnswerStrategy) => {
+    if(getAnswerStrategy){
+      this.getAnswerStrategy = getAnswerStrategy;
+    }
+  }
+
   withQuestionUIFactory = (questionUIFactory) => {
     if (questionUIFactory) {
       this.questionUIFactory = questionUIFactory;
