@@ -3,7 +3,8 @@ export const CLASS_ERRORS = {
 }
 export const QUESTION_TYPES = {
   multipleChoice: "multiple_choice",
-  text: "text"
+  text: "text",
+  multiSelect: "multi_select"
 }
 
 export const QUESTION_ERRORS = {

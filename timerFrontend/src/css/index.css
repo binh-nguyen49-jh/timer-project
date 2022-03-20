@@ -82,6 +82,20 @@ main .timer{
     row-gap: 1rem;
 }
 
+.question.--multi-select form .container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto ;
+    row-gap: 1rem;
+}
+.question.--multi-select input, label, img{
+    cursor: pointer;
+}
+.question.--multi-select .choice-label, .choice-image{
+    width: 100px;
+    height: 100px;
+}
+
 .questions > .action{
     margin-top: 2rem;
     gap: 1rem;

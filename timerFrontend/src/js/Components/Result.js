@@ -39,7 +39,7 @@ function Result({
   </div>
   `;
 }
-const DefaultQuestionResult = ({
+export const DefaultQuestionResult = ({
   question,
   groundTruth,
   userAnswer,

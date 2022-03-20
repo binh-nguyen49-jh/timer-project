@@ -1,6 +1,6 @@
 import { CLASS_ERRORS, QUESTION_ERRORS, QUESTION_TYPES } from "../../config/config";
 
-class Question{
+export class Question{
   constructor({
     type,
     content, 

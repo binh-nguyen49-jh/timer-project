@@ -16,6 +16,17 @@
                 "A email",
                 "A phone"
             ]
+        },
+        {
+            "type": "multi_select",
+            "content": "What are the pictures of dogs?",
+            "answer": "0, 2",
+            "choices": [
+                "https://dogdaygetaway.com/wp-content/uploads/2020/04/hypoallergenic-dogs.jpg",
+                "https://www.kindpng.com/picc/m/5-51409_meme-sad-frog-clipart-sad-frog-hd-png.png",
+                "https://external-preview.redd.it/r3FnNSZCAUzVf4KwYUlY-xd-i6jwEch5l2pYijYiwFk.jpg?auto=webp&s=c21941f80eb6b26e6ccb0739f7e0442ef85044a7",
+                "https://66.media.tumblr.com/4f0d393d9edf42c23cb8cd77378d18f4/tumblr_inline_p7ymh4DjoG1r561jx_500.png"
+            ]
         }
     ]
 }
