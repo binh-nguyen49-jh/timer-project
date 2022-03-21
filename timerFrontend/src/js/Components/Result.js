@@ -7,10 +7,10 @@ function Result({
   timeDoneInSecond,
   questionResultUIFactory
 }) {
-  const mark = results.reduce((mark, {
-    isCorrect
+  const totalMark = results.reduce((totalMark, {
+    mark
   }) => {
-    return isCorrect ? mark + 1 : mark;
+    return totalMark + mark;
   }, 0);
   const numberOfQuestions = results.length;
 
@@ -23,8 +23,8 @@ function Result({
     <div class= "mark__range --low"></div>
     <div class="mark__range --medium"></div>
     <div class="mark__range --high"></div>
-    <div style="width: ${mark / numberOfQuestions * 100}%" class= "mark__current">
-      <span class="mark-value">${mark / numberOfQuestions * 100}%</span>
+    <div style="width: ${totalMark / numberOfQuestions * 100}%" class= "mark__current">
+      <span class="mark-value">${totalMark / numberOfQuestions * 100}%</span>
     </div>
   </div>
   <div class="compare-result container">
@@ -43,7 +43,7 @@ export const DefaultQuestionResult = ({
   question,
   groundTruth,
   userAnswer,
-  isCorrect,
+  mark,
   idx
 }) => {
   return `
@@ -55,7 +55,7 @@ export const DefaultQuestionResult = ({
         <p class="question-content answer">Answer: ${userAnswer}</p>
       </div>
       <strong class="result flex-center">
-        ${isCorrect? '<i class="true fa-solid fa-check"></i>' : '<i class="fa-solid false fa-circle-xmark"></i>'}
+        ${ (mark > 0)? '<i class="true fa-solid fa-check"></i>' : '<i class="fa-solid false fa-circle-xmark"></i>'}
       </strong>
     </div>
   `

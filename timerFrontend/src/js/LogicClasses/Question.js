@@ -58,10 +58,11 @@ export class TextQuestion  extends Question{
 
   checkAnswer(userAnswer) {
     if (!userAnswer) {
-      return false;
+      return 0;
     }
     const normalizedAnswer = userAnswer.trim().toLowerCase();
     const userKeywords = normalizedAnswer.split(", ");
+    console.log(userKeywords, this.keywords)
     const countKeywords = {}
     for (let word of userKeywords) {
       // Mark as user answer right keywords
@@ -75,7 +76,7 @@ export class TextQuestion  extends Question{
       totalCorrectKeywords += isExist;
     }
     // TODO: Find another way
-    return totalCorrectKeywords > 0;
+    return totalCorrectKeywords > 0? 1: 0;
   };
 }
 

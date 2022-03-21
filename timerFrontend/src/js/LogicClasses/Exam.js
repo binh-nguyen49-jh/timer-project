@@ -78,7 +78,7 @@ export default class Exam {
         question: question.content,
         groundTruth: question.answer,
         userAnswer,
-        isCorrect: question.checkAnswer(userAnswer),
+        mark: question.checkAnswer(userAnswer),
         type: question.type
       });
     }
